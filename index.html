@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Paintr</title>
+        <link rel="stylesheet" href="css/paintr.css" type="text/css" />
+    </head>
+    <body>
+        <h1>Paintr Demo</h1>
+
+        <div id="demo"></div>
+
+        <script src="js/paintr.js"></script>
+        <script src="js/utils.js"></script>
+        <script src="js/recordr.js"></script>
+        <script src="js/tools.js"></script>
+        <script src="js/surface.js"></script>
+        <script>
+            (function(){
+                // Instantiate a Drawr to drawr on...
+                var element = document.getElementById('demo'), paintr = new Paintr({
+                        width: 400,
+                        height: 200,
+                        element: element
+                    });
+            })();
+        </script>
+    </body>
+</html>

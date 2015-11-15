@@ -1,0 +1,34 @@
+/* Demo Styles */
+body {
+    font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
+    background: #888;
+}
+
+
+ /* Paintr Surface Styles */
+.paintr-surface canvas {
+    border: 1px solid #d9d9d9;
+    background: #fff;
+}
+
+/* Paintr Tools Styles */
+.paintr-tools ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.paintr-tools ul li {
+    display: inline;
+    padding-left: 5px;
+}
+.paintr-tools ul li:first-of-type{
+    padding-left: 0;
+}
+.paintr-tools ul li>*{
+    vertical-align: middle;
+}
+.paintr-tools ul li.paintr-tools-divider {
+    padding-left: 10px;
+    padding-right: 5px;
+    font-weight: 200;
+}
