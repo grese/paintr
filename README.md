@@ -1,5 +1,7 @@
 # paintr
-A javascript paint tool using canvas.  Written in plain-ol Javascript (No third-party dependencies).
+A javascript paint tool using canvas.
+- Lightweight
+- Written in plain-ol Javascript (No third-party dependencies).
 
 ## Usage:
 Eventually, there will be a minified production file, but for now
