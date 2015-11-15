@@ -21,8 +21,8 @@
         this._element = params.element;
         this._callbacks = {
             onchange: params.onchange,
-            onundo: params.onundo,
-            onredo: params.onredo
+            onundo: params.onundo || new Function(),
+            onredo: params.onredo || new Function()
         }
         this._defaultStrokeColor = params.strokeColor || null;
         this._defaultStrokeWidth = params.strokeWidth || null;
@@ -33,14 +33,6 @@
         _init: function() {
             this._initElement();
             this._render();
-            this._formElements = {
-                strokeColor: this._element.querySelector('.paintr-tools-strokecolor'),
-                strokeWidth: this._element.querySelector('.paintr-tools-strokewidth')
-            };
-            this._buttons = {
-                undo: this._element.querySelector('.paintr-tools-undo'),
-                redo: this._element.querySelector('.paintr-tools-redo')
-            };
             this._attachEventListeners();
         },
 
@@ -50,22 +42,24 @@
 
         _render: function() {
             this._element.innerHTML = this._getMarkup();
+            this._strokeColorInput = this._element.querySelector('.paintr-tools-strokecolor');
+            this._strokeWidthInput = this._element.querySelector('.paintr-tools-strokewidth');
+            this._undoButton = this._element.querySelector('.paintr-tools-undo');
+            this._redoButton = this._element.querySelector('.paintr-tools-redo');
         },
 
         _attachEventListeners: function() {
-            var key,
-                self = this; 
-            for(key in this._formElements) {
-                if (this._formElements.hasOwnProperty(key)) {
-                    this._formElements[key].addEventListener('change', function(e) {
-                        self._handleToolChangeEvent(e);
-                    });
-                }
-            }
-            this._buttons.undo.addEventListener('click', function(e){
+            var self = this; 
+            this._strokeColorInput.addEventListener('change', function(e) {
+                self._handleToolChangeEvent(e);
+            });
+            this._strokeWidthInput.addEventListener('change', function(e) {
+                self._handleToolChangeEvent(e);
+            });
+            this._undoButton.addEventListener('click', function(e){
                 self._handleUndoRedoEvent(e, 'undo');
             });
-            this._buttons.redo.addEventListener('click', function(e){
+            this._redoButton.addEventListener('click', function(e){
                 self._handleUndoRedoEvent(e, 'redo');
             });
         },
@@ -83,9 +77,9 @@
         _handleToolChangeEvent: function(e) {
             var change = this._callbacks.onchange,
                 target = e.target;
-            if (target === this._formElements.strokeColor) {
+            if (target === this._strokeColorInput) {
                 change('strokeColor', target.value);
-            } else if (target === this._formElements.strokeWidth) {
+            } else if (target === this._strokeWidthInput) {
                 change('strokeWidth', target.value);
             }
         },
@@ -94,7 +88,7 @@
             var html = '',
                 strokeWidthControl = ['<li>', this._getStrokeWidthControlMarkup(), '</li>'].join(''),
                 strokeColorControl = ['<li>', this._getStrokeColorControlMarkup(), '</li>'].join(''),
-                divider = '<li class="paintr-tools-divider">|</li>',
+                divider = '<li class="paintr-tools-divider"></li>',
                 undoButton = ['<li>', this._getUndoControlMarkup(), '</li>'].join(''),
                 redoButton = ['<li>', this._getRedoControlMarkup(), '</li>'].join('');
 
@@ -129,6 +123,26 @@
 
         _getRedoControlMarkup: function() {
             return '<button class="paintr-tools-redo">redo</button>';
+        },
+
+        enableUndo: function() {
+            this._undoButton.classList.remove('disabled');
+            this._undoButton.disabled = false;
+        },
+
+        disableUndo: function() {
+            this._undoButton.classList.add('disabled');
+            this._undoButton.disabled = true;
+        },
+
+        enableRedo: function() {
+            this._redoButton.classList.remove('disabled');
+            this._redoButton.disabled = false;
+        },
+
+        disableRedo: function() {
+            this._redoButton.classList.add('disabled');
+            this._redoButton.disabled = true;
         }
     };
 

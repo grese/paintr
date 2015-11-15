@@ -22,33 +22,51 @@
         },
 
         _initSurface: function() {
-            var element = document.createElement('div');
-            this._surface = new Paintr.Surface({
+            var element = document.createElement('div'),
+                self = this;
+            this.surface = new Paintr.Surface({
                 width: this.width,
                 height: this.height,
                 element: element,
                 strokeColor: DEFAULTS.strokeColor,
-                strokeWidth: DEFAULTS.strokeWidth
+                strokeWidth: DEFAULTS.strokeWidth,
+                onchange: function() {
+                    self._handleSurfaceChange();
+                }
             });
             this._element.appendChild(element);
         },
 
+        _handleSurfaceChange: function() {
+            if (this.surface.canUndo()) {
+                this.tools.enableUndo();
+            } else {
+                this.tools.disableUndo();
+            }
+
+            if (this.surface.canRedo()) {
+                this.tools.enableRedo();
+            } else {
+                this.tools.disableRedo();
+            }
+        },
+
         _handleToolsChange: function(key, value) {
-            this._surface.set(key, value);
+            this.surface.set(key, value);
         },
 
         _handleUndo: function() {
-            this._surface.undo();
+            this.surface.undo();
         },
 
         _handleRedo: function() {
-            this._surface.redo();
+            this.surface.redo();
         },
 
         _initTools: function() {
             var element = document.createElement('div'),
                 self = this;
-            this._tools = new Paintr.Tools({
+            this.tools = new Paintr.Tools({
                 element: element,
                 strokeColor: DEFAULTS.strokeColor,
                 strokeWidth: DEFAULTS.strokeWidth,
@@ -63,6 +81,8 @@
                 }
             });
             this._element.appendChild(element);
+            this.tools.disableUndo();
+            this.tools.disableRedo();
         }
     };
 

@@ -6,6 +6,9 @@
         config = config || {};
 
         this._element = config.element || null;
+        this._callbacks = {
+            onchange: config.onchange || new Function()
+        };
         this._settings = {
             width: config.width,
             height: config.height,
@@ -25,11 +28,21 @@
         undo: function() {
             this._recordr.undo();
             this._redraw();
+            this._callbacks.onchange();
         },
 
         redo: function() {
             this._recordr.redo();
             this._redraw();
+            this._callbacks.onchange();
+        },
+
+        canUndo: function() {
+            return this._recordr.canUndo();
+        },
+
+        canRedo: function() {
+            return this._recordr.canRedo();
         },
 
         _canvas: null,
@@ -158,6 +171,7 @@
                 dragging: false
             });
             this._redraw();
+            this._callbacks.onchange();
         },
 
         _handleCanvasMousemove: function(e) {
@@ -170,6 +184,7 @@
                     dragging: true
                 });
                 this._redraw();
+                this._callbacks.onchange();
             }
         },
 
