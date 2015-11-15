@@ -4,6 +4,7 @@ A javascript paint tool using canvas.
 ## Usage:
 Eventually, there will be a minified production file, but for now
 include the following files in your browser:
+- css/paintr.css
 - js/paintr.js
 - js/utils.js
 - js/recordr.js
