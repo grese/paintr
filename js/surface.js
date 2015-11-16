@@ -45,6 +45,10 @@
             return this._recordr.canRedo();
         },
 
+        getImageData: function() {
+            return this._canvas.toDataURL();
+        },
+
         _canvas: null,
         _context: null,
         _recordr: null,

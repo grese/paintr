@@ -83,6 +83,10 @@
             this._element.appendChild(element);
             this.tools.disableUndo();
             this.tools.disableRedo();
+        },
+
+        getImageData: function() {
+            return this.surface.getImageData();
         }
     };
 

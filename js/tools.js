@@ -102,7 +102,7 @@
         },
 
         _getStrokeColorControlMarkup: function() {
-            return '<input type="color" class="paintr-tools-strokecolor" value="' + this._defaultStrokeColor + '">';
+            return ['<input type="color" class="paintr-tools-strokecolor" value="', this._defaultStrokeColor, '">'].join('');
         },
 
         _getStrokeWidthControlMarkup: function() {
