@@ -51,15 +51,19 @@
             });
             this._step++;
         },
-        addBackground: function(image) {
+        addBackground: function(image, width, height) {
             var i;
+            // Make all other backgrounds inactive...
             for (i = 0; i < this._bgs.length; i++) {
                 if (this._bgs[i]) {
                     this._bgs[i].active = false;
                 }
             }
+            // Push a new active background...
             this._bgs.push({
-                image: imgae,
+                origWidth: image.width,
+                origHeight: image.height,
+                image: image,
                 active: true
             });
         },

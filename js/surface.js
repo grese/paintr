@@ -198,6 +198,23 @@
 
         _handleCanvasMouseleave: function(e) {
             this._handleCanvasMouseup(e);
+        },
+
+        _calculateBGDimensions: function(image) {
+
+        },
+
+        _loadNewBackground: function(url) {
+            var self = this,
+                img;
+            if (url) {
+                img = new Image();
+                img.onload = function() {
+                    self._recordr.addBackground(img);
+                    self._redraw();
+                };
+                img.src = url;
+            }
         }
     };
 
