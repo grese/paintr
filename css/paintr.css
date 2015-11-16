@@ -27,7 +27,10 @@ body {
     vertical-align: middle;
 }
 .paintr-tools ul li.paintr-tools-divider {
-    padding-left: 10px;
-    padding-right: 5px;
+    padding-left: 15px;
+    padding-right: 10px;
     font-weight: 200;
+}
+.paintr-tools ul li.paintr-tools-divider::after {
+    content: '|';
 }

@@ -63,6 +63,10 @@
             this.surface.redo();
         },
 
+        _handleExport: function() {
+            console.log('DATA URI: ', this.exportDataURI());
+        },
+
         _initTools: function() {
             var element = document.createElement('div'),
                 self = this;
@@ -78,6 +82,9 @@
                 },
                 onredo: function() {
                     self._handleRedo();
+                },
+                onexport: function() {
+                    self._handleExport();
                 }
             });
             this._element.appendChild(element);
@@ -85,8 +92,8 @@
             this.tools.disableRedo();
         },
 
-        getImageData: function() {
-            return this.surface.getImageData();
+        exportDataURI: function() {
+            return this.surface.exportDataURI();
         }
     };
 

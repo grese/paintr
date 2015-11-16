@@ -22,7 +22,8 @@
         this._callbacks = {
             onchange: params.onchange,
             onundo: params.onundo || new Function(),
-            onredo: params.onredo || new Function()
+            onredo: params.onredo || new Function(),
+            onexport: params.onexport || new Function()
         }
         this._defaultStrokeColor = params.strokeColor || null;
         this._defaultStrokeWidth = params.strokeWidth || null;
@@ -46,6 +47,7 @@
             this._strokeWidthInput = this._element.querySelector('.paintr-tools-strokewidth');
             this._undoButton = this._element.querySelector('.paintr-tools-undo');
             this._redoButton = this._element.querySelector('.paintr-tools-redo');
+            this._exportButton = this._element.querySelector('.paintr-tools-export');
         },
 
         _attachEventListeners: function() {
@@ -62,6 +64,9 @@
             this._redoButton.addEventListener('click', function(e){
                 self._handleUndoRedoEvent(e, 'redo');
             });
+            this._exportButton.addEventListener('click', function(e){
+                self._handleExportEvent();
+            });
         },
 
         _handleUndoRedoEvent: function(e, type) {
@@ -75,13 +80,17 @@
         },
 
         _handleToolChangeEvent: function(e) {
-            var change = this._callbacks.onchange,
+            var onchange = this._callbacks.onchange,
                 target = e.target;
             if (target === this._strokeColorInput) {
-                change('strokeColor', target.value);
+                onchange('strokeColor', target.value);
             } else if (target === this._strokeWidthInput) {
-                change('strokeWidth', target.value);
+                onchange('strokeWidth', target.value);
             }
+        },
+
+        _handleExportEvent: function() {
+            this._callbacks.onexport();
         },
 
         _getMarkup: function() {
@@ -90,7 +99,8 @@
                 strokeColorControl = ['<li>', this._getStrokeColorControlMarkup(), '</li>'].join(''),
                 divider = '<li class="paintr-tools-divider"></li>',
                 undoButton = ['<li>', this._getUndoControlMarkup(), '</li>'].join(''),
-                redoButton = ['<li>', this._getRedoControlMarkup(), '</li>'].join('');
+                redoButton = ['<li>', this._getRedoControlMarkup(), '</li>'].join(''),
+                exportButton = ['<li>', this._getExportControlMarkup(), '</li>'].join('');
 
             return ['<ul>', 
                 strokeColorControl, 
@@ -98,6 +108,8 @@
                 divider, 
                 undoButton, 
                 redoButton, 
+                divider,
+                exportButton,
             '</ul>'].join('');
         },
 
@@ -123,6 +135,10 @@
 
         _getRedoControlMarkup: function() {
             return '<button class="paintr-tools-redo">redo</button>';
+        },
+
+        _getExportControlMarkup: function() {
+            return '<button class="paintr-tools-export">export</button>';
         },
 
         enableUndo: function() {

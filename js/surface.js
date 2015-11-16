@@ -45,7 +45,7 @@
             return this._recordr.canRedo();
         },
 
-        getImageData: function() {
+        exportDataURI: function() {
             return this._canvas.toDataURL();
         },
 
