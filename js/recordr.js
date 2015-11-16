@@ -16,7 +16,7 @@
                 start = end,
                 stroke, i;
             
-            for (i = end; i > 0; i--) {
+            for (i = end; i >= 0; i--) {
                 if (this._clicks[i] && !this._clicks[i].dragging) {
                     start = i;
                     break;
