@@ -54,9 +54,13 @@
         _redraw: function() {
             var ctx = this._context,
                 recordr = this._recordr,
+                bg = recordr.getBackground() || {},
                 i, click, prevClick;
 
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            if (bg.image) {
+                ctx.drawImage(bg.image, 0, 0);
+            }
             ctx.lineJoin = "round";
             ctx.lineWidth = 5;
 

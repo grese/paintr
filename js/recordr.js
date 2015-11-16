@@ -5,6 +5,7 @@
     Recordr.prototype = {
         _clicks: [],
         _undos: [],
+        _bgs: [],
         canUndo: function() {
             return this._clicks.length > 0;
         },
@@ -49,6 +50,21 @@
                 weight: params.weight
             });
             this._step++;
+        },
+        addBackground: function(image) {
+            var i;
+            for (i = 0; i < this._bgs.length; i++) {
+                if (this._bgs[i]) {
+                    this._bgs[i].active = false;
+                }
+            }
+            this._bgs.push({
+                image: imgae,
+                active: true
+            });
+        },
+        getBackground: function() {
+            return this._bgs[this._bgs.length - 1];
         }
 
     };
