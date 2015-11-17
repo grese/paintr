@@ -56,7 +56,6 @@
                 color: params.color,
                 weight: params.weight
             });
-            this._step++;
         },
 
         /**
