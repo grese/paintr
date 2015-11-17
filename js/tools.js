@@ -27,6 +27,7 @@
         }
         this._defaultStrokeColor = params.strokeColor || null;
         this._defaultStrokeWidth = params.strokeWidth || null;
+        this._defaultBgColor = params.bgColor || null;
         this._init();
     }
 
@@ -45,6 +46,7 @@
             this._element.innerHTML = this._getMarkup();
             this._strokeColorInput = this._element.querySelector('.paintr-tools-strokecolor');
             this._strokeWidthInput = this._element.querySelector('.paintr-tools-strokewidth');
+            this._bgColorInput = this._element.querySelector('.paintr-tools-bgcolor');
             this._undoButton = this._element.querySelector('.paintr-tools-undo');
             this._redoButton = this._element.querySelector('.paintr-tools-redo');
             this._exportButton = this._element.querySelector('.paintr-tools-export');
@@ -56,6 +58,9 @@
                 self._handleToolChangeEvent(e);
             });
             this._strokeWidthInput.addEventListener('change', function(e) {
+                self._handleToolChangeEvent(e);
+            });
+            this._bgColorInput.addEventListener('change', function(e) {
                 self._handleToolChangeEvent(e);
             });
             this._undoButton.addEventListener('click', function(e){
@@ -86,6 +91,8 @@
                 onchange('strokeColor', target.value);
             } else if (target === this._strokeWidthInput) {
                 onchange('strokeWidth', target.value);
+            } else if (target === this._bgColorInput) {
+                onchange('backgroundColor', target.value);
             }
         },
 
@@ -95,8 +102,9 @@
 
         _getMarkup: function() {
             var html = '',
-                strokeWidthControl = ['<li>', this._getStrokeWidthControlMarkup(), '</li>'].join(''),
                 strokeColorControl = ['<li>', this._getStrokeColorControlMarkup(), '</li>'].join(''),
+                strokeWidthControl = ['<li>', this._getStrokeWidthControlMarkup(), '</li>'].join(''),
+                bgColorControl = ['<li>', this._getBGColorControlMarkup(), '</li>'].join(''),
                 divider = '<li class="paintr-tools-divider"></li>',
                 undoButton = ['<li>', this._getUndoControlMarkup(), '</li>'].join(''),
                 redoButton = ['<li>', this._getRedoControlMarkup(), '</li>'].join(''),
@@ -104,8 +112,10 @@
 
             return ['<ul>', 
                 strokeColorControl, 
-                strokeWidthControl, 
-                divider, 
+                strokeWidthControl,
+                divider,
+                bgColorControl,
+                divider,
                 undoButton, 
                 redoButton, 
                 divider,
@@ -113,8 +123,12 @@
             '</ul>'].join('');
         },
 
+        _getBGColorControlMarkup: function() {
+            return ['<span class="label">Background:</span><br/><input type="color" class="paintr-tools-bgcolor" value="', (this._defaultBgColor || ''), '">'].join('');
+        },
+
         _getStrokeColorControlMarkup: function() {
-            return ['<input type="color" class="paintr-tools-strokecolor" value="', this._defaultStrokeColor, '">'].join('');
+            return ['<span class="label">Stroke:</span><br/><input type="color" class="paintr-tools-strokecolor" value="', (this._defaultStrokeColor || ''), '">'].join('');
         },
 
         _getStrokeWidthControlMarkup: function() {

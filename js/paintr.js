@@ -4,7 +4,8 @@
         width: 400,
         height: 200,
         strokeColor: '#42d9f7',
-        strokeWidth: 5
+        strokeWidth: 5,
+        bgColor: '#ffffff'
     };
 
     function Paintr(params) {
@@ -52,7 +53,11 @@
         },
 
         _handleToolsChange: function(key, value) {
-            this.surface.set(key, value);
+            if (key === 'backgroundColor') {
+                this.surface.updateBackgroundColor(value);
+            } else {
+                this.surface.set(key, value);
+            }
         },
 
         _handleUndo: function() {
@@ -74,6 +79,7 @@
                 element: element,
                 strokeColor: DEFAULTS.strokeColor,
                 strokeWidth: DEFAULTS.strokeWidth,
+                bgColor: DEFAULTS.bgColor,
                 onchange: function(key, value) {
                     self._handleToolsChange(key, value);
                 },

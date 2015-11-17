@@ -49,12 +49,37 @@
             return this._canvas.toDataURL();
         },
 
+        updateBackgroundColor: function(color) {
+            this._recordr.addBackground({
+                type: 'color',
+                color: color
+            });
+            this._redraw();
+        },
+
+        loadBackgroundImage: function(url) {
+            var self = this,
+                img;
+            if (url) {
+                img = new Image();
+                img.onload = function() {
+                    self._recordr.addBackground({
+                        type: 'image',
+                        image: img
+                    });
+                    self._redraw();
+                };
+                img.src = url;
+            }
+        },
+
         _canvas: null,
         _context: null,
         _recordr: null,
         _getCanvasData: function() {
             return this._canvas.toDataURL();
         },
+
         _redraw: function() {
             var ctx = this._context,
                 recordr = this._recordr,
@@ -62,8 +87,11 @@
                 i, click, prevClick;
 
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-            if (bg.image) {
+            if (bg.type === 'image' && bg.image) {
                 ctx.drawImage(bg.image, 0, 0);
+            } else if (bg.type === 'color' && bg.color) {
+                ctx.fillStyle = bg.color;
+                ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
             }
             ctx.lineJoin = "round";
             ctx.lineWidth = 5;
@@ -85,15 +113,18 @@
                 ctx.stroke();
             }
         },
+
         _init: function() {
             this._recordr = new Paintr.Recordr();
             this._initElement();
             this._initCanvas();
             this._attachCanvasEvents();
         },
+
         _initElement: function() {
             this._element.className = [this._element.className, 'paintr-surface'].join(' ');
         },
+
         _initCanvas: function() {
             this._canvas = document.createElement('canvas');
             this._canvas.className = [this._canvas.className, 'paintr-surface-canvas'].join(' ');
@@ -103,6 +134,7 @@
             this._element.appendChild(this._canvas);
             this._context = this._canvas.getContext('2d'); 
         },
+
         _attachCanvasEvents: function() {
             if (!utils.isTouchDevice()) {
                 this._attachCanvasMousedown();
@@ -123,42 +155,49 @@
                 self._handleCanvasMousedown(e);
             });
         },
+
         _attachCanvasMousemove: function() {
             var self = this;
             self._canvas.addEventListener('mousemove', function(e) {
                 self._handleCanvasMousemove(e);
             });  
         },
+
         _attachCanvasMouseup: function() {
             var self = this;
             self._canvas.addEventListener('mouseup', function(e) {
                 self._handleCanvasMouseup(e);
             });
         },
+
         _attachCanvasMouseleave: function() {
             var self = this;
             self._canvas.addEventListener('mouseleave', function(e) {
                 self._handleCanvasMouseleave(e);
             });
         },
+
         _attachCanvasTouchstart: function() {
             var self = this;
             self._canvas.addEventListener('touchstart', function(e) {
                 self._handleCanvasMousedown(e);
             });
         },
+
         _attachCanvasTouchmove: function() {
             var self = this;
             self._canvas.addEventListener('touchmove', function(e) {
                 self._handleCanvasMousemove(e);
             });
         },
+
         _attachCanvasTouchstop: function() {
             var self = this;
             self._canvas.addEventListener('touchstop', function(e) {
                 self._handleCanvasMouseup(e);
             });
         },
+
         _attachCanvasTouchcancel: function() {
             var self = this;
             self._canvas.addEventListener('touchcancel', function(e) {
@@ -166,7 +205,7 @@
             });
         },
 
-         _handleCanvasMousedown: function(e) {
+        _handleCanvasMousedown: function(e) {
             var mouseX = e.pageX - this.offsetLeft;
             var mouseY = e.pageY - this.offsetTop;
 
@@ -206,19 +245,6 @@
 
         _calculateBGDimensions: function(image) {
 
-        },
-
-        _loadNewBackground: function(url) {
-            var self = this,
-                img;
-            if (url) {
-                img = new Image();
-                img.onload = function() {
-                    self._recordr.addBackground(img);
-                    self._redraw();
-                };
-                img.src = url;
-            }
         }
     };
 
