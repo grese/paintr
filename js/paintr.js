@@ -18,8 +18,13 @@
 
     Paintr.prototype = {
         _init: function() {
-            this._initTools();
+            this._initElement();
             this._initSurface();
+            this._initTools();
+        },
+
+        _initElement: function() {
+            this._element.classList.add('paintr');
         },
 
         _initSurface: function() {
@@ -77,6 +82,7 @@
                 self = this;
             this.tools = new Paintr.Tools({
                 element: element,
+                surfaceHeight: this.height,
                 strokeColor: DEFAULTS.strokeColor,
                 strokeWidth: DEFAULTS.strokeWidth,
                 bgColor: DEFAULTS.bgColor,

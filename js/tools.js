@@ -18,13 +18,17 @@
      */
     function Tools(params) {
         params = params || {};
+        this._isOpen = true;
         this._element = params.element;
+        this._settings = {
+            surfaceHeight: params.surfaceHeight
+        };
         this._callbacks = {
             onchange: params.onchange,
             onundo: params.onundo || new Function(),
             onredo: params.onredo || new Function(),
             onexport: params.onexport || new Function()
-        }
+        };
         this._defaultStrokeColor = params.strokeColor || null;
         this._defaultStrokeWidth = params.strokeWidth || null;
         this._defaultBgColor = params.bgColor || null;
@@ -39,11 +43,15 @@
         },
 
         _initElement: function() {
-            this._element.className = [this._element.className, 'paintr-tools'].join(' ');
+            this._element.classList.add('paintr-tools');
+            if (this._settings.surfaceHeight) {
+                this._element.style.height = this._settings.surfaceHeight + 'px';
+            }
         },
 
         _render: function() {
             this._element.innerHTML = this._getMarkup();
+            this._toggleButton = this._element.querySelector('.paintr-tools-toggle');
             this._strokeColorInput = this._element.querySelector('.paintr-tools-strokecolor');
             this._strokeWidthInput = this._element.querySelector('.paintr-tools-strokewidth');
             this._bgColorInput = this._element.querySelector('.paintr-tools-bgcolor');
@@ -53,7 +61,10 @@
         },
 
         _attachEventListeners: function() {
-            var self = this; 
+            var self = this;
+            this._toggleButton.addEventListener('click', function(e) {
+                self._toggleTools();
+            });
             this._strokeColorInput.addEventListener('change', function(e) {
                 self._handleToolChangeEvent(e);
             });
@@ -72,6 +83,16 @@
             this._exportButton.addEventListener('click', function(e){
                 self._handleExportEvent();
             });
+        },
+
+        _toggleTools: function() {
+            if (this._isOpen) {
+                this._element.classList.add('closed');
+                this._isOpen = false;
+            } else {
+                this._element.classList.remove('closed');
+                this._isOpen = true;
+            }
         },
 
         _handleUndoRedoEvent: function(e, type) {
@@ -101,7 +122,12 @@
         },
 
         _getMarkup: function() {
+            return [this._getToggleMarkup(), this._getToolsMarkup()].join('');
+        },
+
+        _getToolsMarkup: function() {
             var html = '',
+                settingsToggle = this._getToggleMarkup(),
                 strokeColorControl = ['<li>', this._getStrokeColorControlMarkup(), '</li>'].join(''),
                 strokeWidthControl = ['<li>', this._getStrokeWidthControlMarkup(), '</li>'].join(''),
                 bgColorControl = ['<li>', this._getBGColorControlMarkup(), '</li>'].join(''),
@@ -110,7 +136,8 @@
                 redoButton = ['<li>', this._getRedoControlMarkup(), '</li>'].join(''),
                 exportButton = ['<li>', this._getExportControlMarkup(), '</li>'].join('');
 
-            return ['<ul>', 
+            return [
+            '<ul>', 
                 strokeColorControl, 
                 strokeWidthControl,
                 divider,
@@ -121,6 +148,10 @@
                 divider,
                 exportButton,
             '</ul>'].join('');
+        },
+
+        _getToggleMarkup: function() {
+            return '<div class="paintr-tools-header"><button class="paintr-tools-toggle"><span class="fa fa-gear icon"></span></button></div>';
         },
 
         _getBGColorControlMarkup: function() {
