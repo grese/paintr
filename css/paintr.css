@@ -3,9 +3,7 @@ body {
     font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
 }
 
-.paintr {
-    position: relative;
-}
+.paintr {}
 
  /* Paintr Surface Styles */
 .paintr-surface {
