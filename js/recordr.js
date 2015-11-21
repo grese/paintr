@@ -87,7 +87,7 @@
             if (params.type === 'image') {
                 obj = {
                     type: 'image',
-                    color: params.image,
+                    image: params.image,
                     active: true
                 };
             }

@@ -58,19 +58,20 @@
         },
 
         loadBackgroundImage: function(url) {
-            var self = this,
-                img;
+            var img;
             if (url) {
                 img = new Image();
-                img.onload = function() {
-                    self._recordr.addBackground({
-                        type: 'image',
-                        image: img
-                    });
-                    self._redraw();
-                };
+                img.onload = this._handleBGImageLoaded.bind(this, img);
                 img.src = url;
             }
+        },
+
+        _handleBGImageLoaded: function(img) {
+            this._recordr.addBackground({
+                type: 'image',
+                image: img
+            });
+            this._redraw();
         },
 
         _canvas: null,
@@ -85,17 +86,20 @@
                 recordr = this._recordr,
                 bg = recordr.getBackground() || {},
                 i, click, prevClick;
-
+            
+            // clear canvas...
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+            // draw background...
             if (bg.type === 'image' && bg.image) {
                 ctx.drawImage(bg.image, 0, 0);
             } else if (bg.type === 'color' && bg.color) {
                 ctx.fillStyle = bg.color;
                 ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
             }
-            ctx.lineJoin = "round";
-            ctx.lineWidth = 5;
 
+            // draw strokes...
+            ctx.lineJoin = "round";
             for(i = 0; i < recordr.numClicks(); i++) {
                 click = recordr.getClick(i);
                 prevClick = recordr.getClick(i - 1);
@@ -137,72 +141,16 @@
 
         _attachCanvasEvents: function() {
             if (!utils.isTouchDevice()) {
-                this._attachCanvasMousedown();
-                this._attachCanvasMousemove();
-                this._attachCanvasMouseup();
-                this._attachCanvasMouseleave();
+                this._canvas.addEventListener('mousedown', this._handleCanvasMousedown.bind(this));
+                this._canvas.addEventListener('mousemove', this._handleCanvasMousemove.bind(this));
+                this._canvas.addEventListener('mouseup', this._handleCanvasMouseup.bind(this));
+                this._canvas.addEventListener('mouseleave', this._handleCanvasMouseleave.bind(this));
             } else {
-                this._attachCanvasTouchstart();
-                this._attachCanvasTouchmove();
-                this._attachCanvasTouchstop();
-                this._attachCanvasTouchcancel();
+                this._canvas.addEventListener('touchstart', this._handleCanvasMousedown.bind(this));
+                this._canvas.addEventListener('touchmove', this._handleCanvasMousemove.bind(this));
+                this._canvas.addEventListener('touchstop', this._handleCanvasMouseup.bind(this));
+                this._canvas.addEventListener('touchcancel', this._handleCanvasMouseleave.bind(this));
             }
-        },
-
-        _attachCanvasMousedown: function() {
-            var self = this;
-            self._canvas.addEventListener('mousedown', function(e) {
-                self._handleCanvasMousedown(e);
-            });
-        },
-
-        _attachCanvasMousemove: function() {
-            var self = this;
-            self._canvas.addEventListener('mousemove', function(e) {
-                self._handleCanvasMousemove(e);
-            });  
-        },
-
-        _attachCanvasMouseup: function() {
-            var self = this;
-            self._canvas.addEventListener('mouseup', function(e) {
-                self._handleCanvasMouseup(e);
-            });
-        },
-
-        _attachCanvasMouseleave: function() {
-            var self = this;
-            self._canvas.addEventListener('mouseleave', function(e) {
-                self._handleCanvasMouseleave(e);
-            });
-        },
-
-        _attachCanvasTouchstart: function() {
-            var self = this;
-            self._canvas.addEventListener('touchstart', function(e) {
-                self._handleCanvasMousedown(e);
-            });
-        },
-
-        _attachCanvasTouchmove: function() {
-            var self = this;
-            self._canvas.addEventListener('touchmove', function(e) {
-                self._handleCanvasMousemove(e);
-            });
-        },
-
-        _attachCanvasTouchstop: function() {
-            var self = this;
-            self._canvas.addEventListener('touchstop', function(e) {
-                self._handleCanvasMouseup(e);
-            });
-        },
-
-        _attachCanvasTouchcancel: function() {
-            var self = this;
-            self._canvas.addEventListener('touchcancel', function(e) {
-                self._handleCanvasMouseup(e);
-            });
         },
 
         _handleCanvasMousedown: function(e) {
@@ -241,10 +189,6 @@
 
         _handleCanvasMouseleave: function(e) {
             this._handleCanvasMouseup(e);
-        },
-
-        _calculateBGDimensions: function(image) {
-
         }
     };
 

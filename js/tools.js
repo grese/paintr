@@ -61,28 +61,13 @@
         },
 
         _attachEventListeners: function() {
-            var self = this;
-            this._toggleButton.addEventListener('click', function(e) {
-                self._toggleTools();
-            });
-            this._strokeColorInput.addEventListener('change', function(e) {
-                self._handleToolChangeEvent(e);
-            });
-            this._strokeWidthInput.addEventListener('change', function(e) {
-                self._handleToolChangeEvent(e);
-            });
-            this._bgColorInput.addEventListener('change', function(e) {
-                self._handleToolChangeEvent(e);
-            });
-            this._undoButton.addEventListener('click', function(e){
-                self._handleUndoRedoEvent(e, 'undo');
-            });
-            this._redoButton.addEventListener('click', function(e){
-                self._handleUndoRedoEvent(e, 'redo');
-            });
-            this._exportButton.addEventListener('click', function(e){
-                self._handleExportEvent();
-            });
+            this._toggleButton.addEventListener('click', this._toggleTools.bind(this));
+            this._strokeColorInput.addEventListener('change', this._handleToolChangeEvent.bind(this));
+            this._strokeWidthInput.addEventListener('change', this._handleToolChangeEvent.bind(this));
+            this._bgColorInput.addEventListener('change', this._handleToolChangeEvent.bind(this));
+            this._undoButton.addEventListener('click', this._handleUndoRedoEvent.bind(this), 'undo');
+            this._redoButton.addEventListener('click', this._handleUndoRedoEvent.bind(this, 'redo'));
+            this._exportButton.addEventListener('click', this._handleExportEvent.bind(this));
         },
 
         _toggleTools: function() {
