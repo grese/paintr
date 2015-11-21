@@ -25,9 +25,9 @@
         };
         this._callbacks = {
             onchange: params.onchange,
-            onundo: params.onundo || new Function(),
-            onredo: params.onredo || new Function(),
-            onexport: params.onexport || new Function()
+            onundo: params.onundo || function(){},
+            onredo: params.onredo || function(){},
+            onexport: params.onexport || function(){}
         };
         this._defaultStrokeColor = params.strokeColor || null;
         this._defaultStrokeWidth = params.strokeWidth || null;

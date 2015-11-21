@@ -7,7 +7,7 @@
 
         this._element = config.element || null;
         this._callbacks = {
-            onchange: config.onchange || new Function()
+            onchange: config.onchange || function(){}
         };
         this._settings = {
             width: config.width,
