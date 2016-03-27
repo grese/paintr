@@ -65,8 +65,8 @@
             this._strokeColorInput.addEventListener('change', this._handleToolChangeEvent.bind(this));
             this._strokeWidthInput.addEventListener('change', this._handleToolChangeEvent.bind(this));
             this._bgColorInput.addEventListener('change', this._handleToolChangeEvent.bind(this));
-            this._undoButton.addEventListener('click', this._handleUndoRedoEvent.bind(this), 'undo');
-            this._redoButton.addEventListener('click', this._handleUndoRedoEvent.bind(this, 'redo'));
+            this._undoButton.addEventListener('click', this._handleUndoEvent.bind(this));
+            this._redoButton.addEventListener('click', this._handleRedoEvent.bind(this));
             this._exportButton.addEventListener('click', this._handleExportEvent.bind(this));
         },
 
@@ -80,14 +80,12 @@
             }
         },
 
-        _handleUndoRedoEvent: function(e, type) {
-            var onundo = this._callbacks.onundo,
-                onredo = this._callbacks.onredo;
-            if (type === 'undo') {
-                onundo(e);
-            } else if (type === 'redo') {
-                onredo(e);
-            }
+        _handleUndoEvent: function(e) {
+            this._callbacks.onundo(e);
+        },
+
+        _handleRedoEvent: function(e) {
+            this._callbacks.onredo(e);
         },
 
         _handleToolChangeEvent: function(e) {
